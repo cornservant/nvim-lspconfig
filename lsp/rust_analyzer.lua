@@ -118,7 +118,7 @@ return {
       cargo_crate_dir .. '/Cargo.toml',
     }
 
-    vim.system(cmd, { text = true }, function(output)
+    local ok, _ = pcall(vim.system, cmd, { text = true }, function(output)
       if output.code == 0 then
         if output.stdout then
           local result = vim.json.decode(output.stdout)
@@ -134,6 +134,10 @@ return {
         end)
       end
     end)
+
+    if not ok then
+      vim.notify('cargo could not be found')
+    end
   end,
   capabilities = {
     experimental = {
